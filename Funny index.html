@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>趣味小處罰方格</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      background-color: #FFF0F5;
+      margin: 0;
+      padding: 2rem 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      max-width: 90vw;
+      margin: 2rem auto;
+    }
+    .cell {
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      transition: border 0.1s;
+      font-size: 0.85rem;
+      word-break: break-word;
+    }
+    .highlight {
+      border: 2px solid #FF69B4;
+      background-color: #FFDDEE !important;
+    }
+    .start-button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      background-color: #FFB6C1;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    @media (max-width: 500px) {
+      .cell {
+        padding: 0.6rem;
+        font-size: 0.75rem;
+      }
+      .start-button {
+        width: 100%;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>趣味小處罰方格</h1>
+  <div class="grid" id="grid"></div>
+  <button class="start-button" onclick="startSelection()">開始</button>
+  <div class="result" id="result"></div>
+  <audio id="tickSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+
+  <script>
+    const actions = [
+      "對著空氣大喊自己的名字三次",
+      "用外星人語講一句話",
+      "轉三圈再擺個帥姿勢",
+      "假裝是一隻貓走路10秒",
+      "學青蛙跳3次",
+      "唱一句流行歌",
+      "用娃娃音說出今天的心情",
+      "裝扮自己成機器人走3步",
+      "閉眼畫出愛心給大家",
+      "模仿你朋友講話10秒",
+      "用超認真語氣說一件超無聊的事",
+      "用屁股寫自己的名字（比動作）",
+      "模仿電視購物台賣東西",
+      "用自己最帥／最萌的表情自拍",
+      "對旁邊的人說一句超誇張的讚美",
+      "雙手高舉原地跳兩下",
+      "用廣播腔說出現在時間",
+      "模仿動物叫聲5種",
+      "用英文說出你最喜歡的食物",
+      "對自己說“你真的很棒！”三次",
+      "用手比出一朵花送給大家",
+      "擺出你心中“內心小劇場”的臉",
+      "念出你鞋子的品牌名稱",
+      "選一樣東西，介紹它像明星一樣",
+      "擺一個奇怪的姿勢10秒"
+    ];
+
+    const pastelColors = [
+      '#FFDDEE', '#FFFACD', '#E0FFFF', '#E6E6FA', '#FFDAB9',
+      '#FFB6C1', '#D8BFD8', '#AFEEEE', '#B0E0E6', '#FFE4E1'
+    ];
+
+    const grid = document.getElementById("grid");
+    const result = document.getElementById("result");
+    const tickSound = document.getElementById("tickSound");
+    let cells = [];
+    let current = 0;
+
+    function renderGrid() {
+      grid.innerHTML = "";
+      cells = [];
+      actions.forEach(action => {
+        const div = document.createElement("div");
+        div.className = "cell";
+        div.style.backgroundColor = pastelColors[Math.floor(Math.random() * pastelColors.length)];
+        div.textContent = action;
+        grid.appendChild(div);
+        cells.push(div);
+      });
+    }
+
+    function startSelection() {
+      cells.forEach(cell => cell.classList.remove("highlight"));
+      current = 0;
+      let steps = Math.floor(Math.random() * 20) + 30;
+      let count = 0;
+      let delay = 50;
+
+      function animate() {
+        if (count > 0) {
+          cells[(current - 1 + cells.length) % cells.length].classList.remove("highlight");
+        }
+        cells[current % cells.length].classList.add("highlight");
+        tickSound.currentTime = 0;
+        tickSound.play();
+
+        current++;
+        count++;
+
+        if (count < steps) {
+          delay += 10;
+          setTimeout(animate, delay);
+        } else {
+          const selected = actions[(current - 1) % actions.length];
+          result.textContent = `👉 ${selected}`;
+        }
+      }
+
+      animate();
+    }
+
+    renderGrid();
+  </script>
+</body>
+</html>
+
