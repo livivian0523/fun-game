@@ -61,7 +61,7 @@
   <div class="grid" id="grid"></div>
   <button class="start-button" onclick="startSelection()">開始</button>
   <div class="result" id="result"></div>
-  <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3dd98ddf3e.mp3?filename=happy-kids-110718.mp3" autoplay loop></audio>
+  <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3dd98ddf3e.mp3?filename=happy-kids-110718.mp3" loop></audio>
 
   <script>
     const actions = [
@@ -99,6 +99,7 @@
 
     const grid = document.getElementById("grid");
     const result = document.getElementById("result");
+    const bgm = document.getElementById("bgm");
     let cells = [];
     let current = 0;
 
@@ -116,6 +117,11 @@
     }
 
     function startSelection() {
+      if (bgm.paused) {
+        bgm.volume = 0.4;
+        bgm.play().catch(() => {});
+      }
+
       cells.forEach(cell => cell.classList.remove("highlight"));
       current = Math.floor(Math.random() * cells.length);
       let steps = Math.floor(Math.random() * 40) + 10;
