@@ -61,7 +61,7 @@
   <div class="grid" id="grid"></div>
   <button class="start-button" onclick="startSelection()">開始</button>
   <div class="result" id="result"></div>
-  <audio id="tickSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+  <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3dd98ddf3e.mp3?filename=happy-kids-110718.mp3" autoplay loop></audio>
 
   <script>
     const actions = [
@@ -99,7 +99,6 @@
 
     const grid = document.getElementById("grid");
     const result = document.getElementById("result");
-    const tickSound = document.getElementById("tickSound");
     let cells = [];
     let current = 0;
 
@@ -118,24 +117,22 @@
 
     function startSelection() {
       cells.forEach(cell => cell.classList.remove("highlight"));
-      current = 0;
-      let steps = Math.floor(Math.random() * 20) + 30;
+      current = Math.floor(Math.random() * cells.length);
+      let steps = Math.floor(Math.random() * 40) + 10;
       let count = 0;
-      let delay = 50;
+      let delay = 30;
 
       function animate() {
         if (count > 0) {
           cells[(current - 1 + cells.length) % cells.length].classList.remove("highlight");
         }
         cells[current % cells.length].classList.add("highlight");
-        tickSound.currentTime = 0;
-        tickSound.play();
 
         current++;
         count++;
 
         if (count < steps) {
-          delay += 10;
+          delay += 6;
           setTimeout(animate, delay);
         } else {
           const selected = actions[(current - 1) % actions.length];
@@ -150,4 +147,3 @@
   </script>
 </body>
 </html>
-
